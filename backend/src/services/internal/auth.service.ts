@@ -1,38 +1,47 @@
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
-import { validationResult } from 'express-validator';
-import { sanitize } from '../../shared/utils/sanitizer';
-import { getUsersCollection } from '../../infrastructure/database/mongo';
+const prisma = new PrismaClient();
+const JWT_SECRET = process.env.JWT_SECRET || "change_this";
 
-const JWT_SECRET = process.env.JWT_SECRET || 'change-me';
+export async function loginController(email: string, password: string) {
+  const user = await prisma.user.findUnique({ where: { email } });
 
-export async function registerController(req: Request, res: Response) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+  if (!user) throw new Error("Usuário não encontrado");
 
-  const { email, password, role = 'user' } = req.body;
-  const sanitizedEmail = sanitize(email);
-  const hashed = await bcrypt.hash(sanitize(password), 10);
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) throw new Error("Senha incorreta");
 
-  const users = await getUsersCollection();
-  const existing = await users.findOne({ email: sanitizedEmail });
-  if (existing) return res.status(409).json({ message: 'Email already registered' });
+  const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "7d" });
 
-  const result = await users.insertOne({ email: sanitizedEmail, passwordHash: hashed, role });
-  return res.status(201).json({ id: result.insertedId, email: sanitizedEmail });
+  return { token, user };
 }
 
-export async function loginController(req: Request, res: Response) {
-  const { email, password } = req.body;
-  const users = await getUsersCollection();
-  const user = await users.findOne({ email: sanitize(email) });
-  if (!user) return res.status(401).json({ message: 'Invalid credentials' });
+export async function registerController(data: any) {
+  const hashed = await bcrypt.hash(data.password, 10);
 
-  const valid = await bcrypt.compare(password, user.passwordHash);
-  if (!valid) return res.status(401).json({ message: 'Invalid credentials' });
+  const newUser = await prisma.user.create({
+    data: {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      city: data.city,
+      state: data.state,
+      password: hashed,
+    },
+  });
 
-  const token = jwt.sign({ sub: String(user._id), role: user.role }, JWT_SECRET, { expiresIn: '7d' });
-  res.json({ token });
+  return { id: newUser.id };
+}
+
+export async function forgotPasswordController(email: string) {
+  const user = await prisma.user.findUnique({ where: { email } });
+
+  // Não vamos expor se o usuário existe ou não (prática segura)
+  if (!user) return { status: "ok" };
+
+  console.log(`Solicitação de redefinição de senha para: ${email}`);
+
+  return { status: "ok" };
 }

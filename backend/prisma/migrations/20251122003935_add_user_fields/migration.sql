@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `user` ADD COLUMN `city` VARCHAR(191) NULL,
+    ADD COLUMN `phone` VARCHAR(191) NULL,
+    ADD COLUMN `state` VARCHAR(191) NULL;

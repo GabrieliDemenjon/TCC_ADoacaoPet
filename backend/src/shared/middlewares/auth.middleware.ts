@@ -1,19 +1,37 @@
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'change-me';
+const JWT_SECRET = process.env.JWT_SECRET || "super_secret_key_123";
 
 export function jwtAuth(req: Request, res: Response, next: NextFunction) {
   const auth = req.headers.authorization;
-  if (!auth) return res.status(401).json({ message: 'No token' });
 
-  const [, token] = auth.split(' ');
+  if (!auth) {
+    return res.status(401).json({ message: "Token não fornecido" });
+  }
+
+
+  const parts = auth.split(" ");
+
+  if (parts.length !== 2 || parts[0] !== "Bearer") {
+    return res.status(401).json({ message: "Formato de token inválido" });
+  }
+
+  const token = parts[1];
+
   try {
-    const payload = jwt.verify(token, JWT_SECRET);
-    (req as any).user = payload;
+    const payload = jwt.verify(token, JWT_SECRET) as any;
+
+
+    if (!payload.userId) {
+      return res.status(401).json({ message: "Token malformado" });
+    }
+
+
+    (req as any).userId = payload.userId;
+
     next();
   } catch (err) {
-    return res.status(401).json({ message: 'Invalid token' });
+    return res.status(401).json({ message: "Token inválido ou expirado" });
   }
 }

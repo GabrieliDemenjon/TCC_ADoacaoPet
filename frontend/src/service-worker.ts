@@ -1,12 +1,7 @@
-
-self.addEventListener('install', (event) => {
-  (self as any).skipWaiting();
+self.addEventListener("install", () => {
+  console.log("Service worker instalado!");
 });
 
-self.addEventListener('activate', (event) => {
-  (self as any).clients.claim();
-});
-
-self.addEventListener('fetch', (event: any) => {
-  // Minimal service worker: implement caching strategy per needs.
+self.addEventListener("activate", () => {
+  console.log("Service worker ativado!");
 });

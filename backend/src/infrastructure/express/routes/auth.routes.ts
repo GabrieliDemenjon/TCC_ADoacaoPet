@@ -1,24 +1,34 @@
-
-import { Router } from 'express';
-import { body } from 'express-validator';
-import { registerController, loginController } from '../../../services/internal/auth.service';
+import { Router } from "express";
+import { loginController, registerController, forgotPasswordController } from "../../../services/internal/auth.service";
 
 const router = Router();
 
-/**
- * Register (email/password)
- */
-router.post('/register',
-  body('email').isEmail(),
-  body('password').isLength({ min: 6 }),
-  registerController);
+router.post("/login", async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const response = await loginController(email, password);
+    return res.json(response);
+  } catch (error) {
+    next(error);
+  }
+});
 
-/**
- * Login
- */
-router.post('/login',
-  body('email').isEmail(),
-  body('password').exists(),
-  loginController);
+router.post("/register", async (req, res, next) => {
+  try {
+    const response = await registerController(req.body);
+    return res.json(response);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/forgot-password", async (req, res, next) => {
+  try {
+    const response = await forgotPasswordController(req.body.email);
+    return res.json(response);
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;

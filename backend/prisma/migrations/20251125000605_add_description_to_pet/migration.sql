@@ -1,0 +1,2 @@
+ALTER TABLE `pet`
+ADD COLUMN `description` VARCHAR(191) NOT NULL;

@@ -1,15 +1,15 @@
-
 {
   "compilerOptions": {
     "target": "ES2021",
-    "lib": ["DOM","ES2021"],
+    "lib": ["DOM", "ES2021"],
     "jsx": "react-jsx",
     "module": "ESNext",
     "moduleResolution": "Node",
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["vite/client"]
   },
   "include": ["src"]
 }

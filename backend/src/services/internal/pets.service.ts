@@ -1,24 +1,53 @@
+import { PrismaClient } from "@prisma/client";
 
-import { Request, Response } from 'express';
-import { getPetsCollection } from '../../infrastructure/database/mongo';
-import { sanitize } from '../../shared/utils/sanitizer';
+const prisma = new PrismaClient();
 
-/**
- * List pets (simple)
- */
-export async function listPetsController(req: Request, res: Response) {
-  const pets = await getPetsCollection();
-  const items = await pets.find({}).toArray();
-  res.json(items);
+export async function listPetsController() {
+  return prisma.pet.findMany({
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+  });
 }
 
-/**
- * Create pet (simplified)
- */
-export async function createPetController(req: Request, res: Response) {
-  const { name, type, age } = req.body;
-  const pets = await getPetsCollection();
-  const doc = { name: sanitize(name), type: sanitize(type), age };
-  const result = await pets.insertOne(doc);
-  res.status(201).json({ id: result.insertedId, ...doc });
+export async function getPetController(id: number) {
+  return prisma.pet.findUnique({
+    where: { id },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+  });
+}
+
+export async function createPetController(req: any, res: any, next: any) {
+  try {
+    const { name, age, type, description } = req.body;
+
+    const pet = await prisma.pet.create({
+      data: {
+        name,
+        age,
+        type,
+        description,  
+        adopted: false,
+        userId: req.userId, 
+      },
+    });
+
+    return res.status(201).json(pet);
+  } catch (error) {
+    next(error);
+  }
 }
