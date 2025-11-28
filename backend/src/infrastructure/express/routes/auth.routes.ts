@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { loginController, registerController, forgotPasswordController } from "../../../services/internal/auth.service";
+import { 
+  loginController, 
+  registerController, 
+  forgotPasswordController, 
+  meController 
+} from "../../../services/internal/auth.service";
+import { jwtAuth } from "../../../shared/middlewares/auth.middleware";
 
 const router = Router();
 
@@ -30,5 +36,7 @@ router.post("/forgot-password", async (req, res, next) => {
     next(error);
   }
 });
+
+router.get("/me", jwtAuth, meController);
 
 export default router;

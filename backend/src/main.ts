@@ -29,10 +29,10 @@ app.use(
   })
 );
 
-// Rotas
+
 initRoutes(app);
 
-// Handler global de erros
+
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { apiPost } from "../utils/api"; 
+import { apiPost } from "../utils/api";
 import { useNavigate } from "react-router-dom";
 
 export default function AddPet() {
@@ -21,6 +21,8 @@ export default function AddPet() {
 
   function handleImage(e: any) {
     const file = e.target.files[0];
+    if (!file) return;
+
     setImage(file);
     setPreview(URL.createObjectURL(file));
   }
@@ -28,19 +30,22 @@ export default function AddPet() {
   async function handleSubmit(e: any) {
     e.preventDefault();
 
-    const data = new FormData();
+    // validação da idade
+    const ageNum = Number(form.age);
+    if (ageNum < 0 || ageNum > 25) {
+      return alert("A idade deve estar entre 0 e 25 anos.");
+    }
 
+    const data = new FormData();
     data.append("name", form.name);
     data.append("age", form.age);
     data.append("type", form.type);
     data.append("description", form.description);
 
-    if (image) {
-      data.append("image", image);
-    }
+    if (image) data.append("image", image);
 
     try {
-      await apiPost("/pets", data); 
+      await apiPost("/pets", data);
       alert("Pet cadastrado com sucesso!");
       navigate("/");
     } catch (error) {
@@ -73,7 +78,12 @@ export default function AddPet() {
 
           <label className="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-semibold">
             Selecionar Imagem
-            <input type="file" accept="image/*" className="hidden" onChange={handleImage} />
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImage}
+            />
           </label>
         </div>
 
@@ -90,9 +100,11 @@ export default function AddPet() {
         <input
           name="age"
           type="number"
-          placeholder="Idade"
+          placeholder="Idade (0 a 25)"
           value={form.age}
           onChange={handleChange}
+          min={0}
+          max={25}
           className="w-full border p-2 rounded"
           required
         />

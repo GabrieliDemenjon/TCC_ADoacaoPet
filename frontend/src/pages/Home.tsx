@@ -6,43 +6,65 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadPets() {
+    async function load() {
       try {
         const data = await getPets();
         setPets(data);
-      } catch (err) {
-        console.error("Erro ao carregar pets:", err);
+      } catch (error) {
+        console.error("Erro ao carregar pets:", error);
       } finally {
         setLoading(false);
       }
     }
-    loadPets();
+    load();
   }, []);
 
+  if (loading) return <p className="p-4">Carregando...</p>;
+
   return (
-    <main className="p-4 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold">Encontre um amigo</h1>
+    <main className="p-4 max-w-6xl mx-auto">
 
-      <section className="mt-6">
-        <h2 className="text-xl">Resultados</h2>
+      <h1 className="text-3xl font-bold mb-6">Pets Disponíveis para Adoção</h1>
 
-        {loading && <p>Carregando...</p>}
+      {pets.length === 0 && (
+        <p className="text-gray-500">Nenhum pet disponível no momento.</p>
+      )}
 
-        {!loading && pets.length === 0 && (
-          <p className="text-gray-500 mt-4">Nenhum pet encontrado.</p>
-        )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-          {pets.map((pet) => (
-            <li key={pet.id} className="border rounded p-3">
-              <h3 className="font-semibold">
-                {pet.name} — {pet.age} anos
-              </h3>
-              <p className="text-sm">{pet.type}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
+        {pets.map((pet) => (
+          <div
+            key={pet.id}
+            className="border rounded-lg shadow p-4 flex flex-col"
+          >
+            {/* FOTO */}
+            {pet.imageUrl ? (
+              <img
+                src={pet.imageUrl}
+                alt={pet.name}
+                className="h-48 w-full object-cover rounded mb-3"
+              />
+            ) : (
+              <div className="h-48 bg-gray-200 rounded mb-3 flex items-center justify-center text-gray-600">
+                Sem foto
+              </div>
+            )}
+
+            <h2 className="text-xl font-semibold">{pet.name}</h2>
+            <p className="text-gray-700">{pet.age} anos</p>
+            <p className="text-gray-600">{pet.type}</p>
+
+            <a
+              href={`/pet/${pet.id}`}
+              className="mt-4 bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700"
+            >
+              Ver detalhes
+            </a>
+          </div>
+        ))}
+
+      </div>
+
     </main>
   );
 }

@@ -3,44 +3,55 @@ import {
   listPetsController,
   getPetController,
   createPetController,
+  adoptPetController,
 } from "../../../services/internal/pets.service";
 
 import { jwtAuth } from "../../../shared/middlewares/auth.middleware";
+import { upload } from "../../../shared/multer/multer";
+import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
 const router = Router();
 
-
+// LISTAR TODOS OS PETS
 router.get("/", async (req, res, next) => {
   try {
     const pets = await listPetsController();
     res.json(pets);
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    next(e);
   }
 });
 
+// LISTAR APENAS PETS DO USUÁRIO LOGADO
+router.get("/my-pets", jwtAuth, async (req: any, res, next) => {
+  try {
+    const pets = await prisma.pet.findMany({
+      where: { userId: req.userId },
+      include: { user: true },
+    });
 
+    res.json(pets);
+  } catch (e) {
+    next(e);
+  }
+});
+
+// DETALHES DO PET
 router.get("/:id", async (req, res, next) => {
   try {
     const id = Number(req.params.id);
-
-    if (isNaN(id)) {
-      return res.status(400).json({ message: "ID inválido" });
-    }
-
     const pet = await getPetController(id);
-
-    if (!pet) {
-      return res.status(404).json({ message: "Pet não encontrado" });
-    }
-
     res.json(pet);
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    next(e);
   }
 });
 
+// CRIAR PET
+router.post("/", jwtAuth, upload.single("image"), createPetController);
 
-router.post("/", jwtAuth, createPetController);
+// ADOTAR PET
+router.patch("/:id/adopt", jwtAuth, adoptPetController);
 
 export default router;

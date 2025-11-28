@@ -25,10 +25,10 @@ export async function registerController(data: any) {
     data: {
       name: data.name,
       email: data.email,
+      password: hashed,
       phone: data.phone,
       city: data.city,
       state: data.state,
-      password: hashed,
     },
   });
 
@@ -37,11 +37,16 @@ export async function registerController(data: any) {
 
 export async function forgotPasswordController(email: string) {
   const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) return { status: "ok" }; // segurança
 
-  // Não vamos expor se o usuário existe ou não (prática segura)
-  if (!user) return { status: "ok" };
-
-  console.log(`Solicitação de redefinição de senha para: ${email}`);
-
+  console.log("Solicitação de redefinição:", email);
   return { status: "ok" };
+}
+
+export async function meController(req: any, res: any) {
+  const user = await prisma.user.findUnique({
+    where: { id: req.userId },
+  });
+
+  return res.json(user);
 }
