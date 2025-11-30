@@ -17,10 +17,8 @@ export default function Register() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-
   function maskPhone(value: string) {
     value = value.replace(/\D/g, "");
-
     if (value.length > 11) value = value.slice(0, 11);
 
     if (value.length <= 10) {
@@ -38,16 +36,12 @@ export default function Register() {
     let { name, value } = e.target;
 
     if (name === "phone") value = maskPhone(value);
-
     if (name === "state") value = value.toUpperCase().slice(0, 2);
-
-    if (name === "city")
-      value = value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+    if (name === "city") value = value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
 
     setForm({ ...form, [name]: value });
     setError("");
   }
-
 
   function validateFields() {
     if (!form.email.endsWith("@gmail.com"))
@@ -79,7 +73,6 @@ export default function Register() {
     return null;
   }
 
-
   async function handleRegister(e: any) {
     e.preventDefault();
 
@@ -105,100 +98,113 @@ export default function Register() {
   }
 
   return (
-    <main className="p-4 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-center">
-        Criar Conta
-      </h1>
+    <div
+      className="
+        min-h-screen flex items-center justify-center
+        bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100
+        px-6
+      "
+    >
+      <main
+        className="
+          w-full max-w-md
+          bg-white/60 backdrop-blur-xl
+          p-8 rounded-3xl
+          shadow-lg border border-rose-200/40
+        "
+      >
+        <h1 className="text-3xl font-semibold text-center text-rose-500 mb-6">
+          Criar Conta
+        </h1>
 
-      <form className="space-y-3" onSubmit={handleRegister}>
-        {error && (
-          <p className="text-red-600 font-semibold bg-red-100 p-2 rounded">
-            {error}
-          </p>
-        )}
+        <form className="space-y-4" onSubmit={handleRegister}>
+          {error && (
+            <p className="text-red-600 font-semibold bg-red-100 p-3 rounded-xl">
+              {error}
+            </p>
+          )}
 
-        <input
-          name="name"
-          type="text"
-          placeholder="Nome completo"
-          className="p-2 border rounded w-full"
-          value={form.name}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          name="email"
-          type="email"
-          placeholder="Email (apenas @gmail.com)"
-          className="p-2 border rounded w-full"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
-
-        {/* CAMPO DE SENHA COM OLHO */}
-        <div className="relative">
           <input
-            name="password"
-            type={showPassword ? "text" : "password"}
-            placeholder="Senha"
-            className="p-2 border rounded w-full"
-            value={form.password}
+            name="name"
+            type="text"
+            placeholder="Nome completo"
+            className="input-rose"
+            value={form.name}
             onChange={handleChange}
             required
           />
 
-          <button
-            type="button"
-            className="absolute right-3 top-2 text-gray-600"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? "🙈" : "👁️"}
-          </button>
-        </div>
+          <input
+            name="email"
+            type="email"
+            placeholder="Email (apenas @gmail.com)"
+            className="input-rose"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          name="phone"
-          type="text"
-          placeholder="Telefone"
-          className="p-2 border rounded w-full"
-          value={form.phone}
-          onChange={handleChange}
-          required
-        />
+          {/* SENHA + OLHO */}
+          <div className="relative">
+            <input
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Senha"
+              className="input-rose"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
 
-        <input
-          name="city"
-          type="text"
-          placeholder="Cidade"
-          className="p-2 border rounded w-full"
-          value={form.city}
-          onChange={handleChange}
-          required
-        />
+            <button
+              type="button"
+              className="absolute right-3 top-3 text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "🙈" : "👁️"}
+            </button>
+          </div>
 
-        <input
-          name="state"
-          type="text"
-          placeholder="Estado (ex: SP)"
-          className="p-2 border rounded w-full"
-          value={form.state}
-          onChange={handleChange}
-          required
-        />
+          <input
+            name="phone"
+            type="text"
+            placeholder="Telefone"
+            className="input-rose"
+            value={form.phone}
+            onChange={handleChange}
+            required
+          />
 
-        <button className="px-4 py-2 bg-green-600 text-white rounded w-full">
-          Criar Conta
-        </button>
-      </form>
+          <input
+            name="city"
+            type="text"
+            placeholder="Cidade"
+            className="input-rose"
+            value={form.city}
+            onChange={handleChange}
+            required
+          />
 
-      <p className="text-center mt-4 text-sm">
-        Já tem conta?{" "}
-        <Link to="/login" className="text-blue-600 font-semibold">
-          Entrar
-        </Link>
-      </p>
-    </main>
+          <input
+            name="state"
+            type="text"
+            placeholder="Estado (ex: SP)"
+            className="input-rose"
+            value={form.state}
+            onChange={handleChange}
+            required
+          />
+
+          <button className="btn-rose w-full">Criar Conta</button>
+        </form>
+
+        <p className="text-center text-rose-700 mt-6">
+          Já tem conta?{" "}
+          <Link to="/login" className="text-rose-600 font-semibold">
+            Entrar
+          </Link>
+        </p>
+      </main>
+    </div>
   );
 }

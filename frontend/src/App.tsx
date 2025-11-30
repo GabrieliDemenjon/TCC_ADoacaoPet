@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -10,8 +10,9 @@ import AddPet from "./pages/AddPet";
 import Profile from "./pages/Profile";
 import MyPets from "./pages/MyPets";
 
-
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import Logo from "./assets/logo.png";
+
 
 
 function Navbar() {
@@ -24,45 +25,64 @@ function Navbar() {
   }
 
   return (
-    <nav className="bg-blue-600 p-4 text-white flex justify-between items-center">
-      <a href="/" className="font-bold text-xl">Pet Adoção</a>
+    <nav
+      className="
+        w-full px-6 py-3
+        fixed top-0 left-0 z-50 
+        bg-white/40 backdrop-blur-xl 
+        border-b border-rose-200/40
+        flex justify-between items-center
+      "
+    >
 
-      <div className="flex gap-4 items-center">
+      <Link to="/" className="flex items-center gap-2">
+        <img src={Logo} alt="Pet&Eu" className="w-12 opacity-150" />
+        <span className="text-rose-500 font-semibold text-lg">Home</span>
+      </Link>
 
-        <a href="/" className="hover:underline">Home</a>
-
-        {!user && (
-          <>
-            <a href="/login" className="hover:underline">Login</a>
-            <a href="/register" className="hover:underline">Criar Conta</a>
-          </>
-        )}
-
-        {user && (
-          <>
-            <a href="/profile" className="hover:underline">Meu Perfil</a>
-            <a href="/my-pets" className="hover:underline">Meus Pets</a>
-
-            <a href="/add-pet" className="hover:underline">
-              + Adicionar Pet
-            </a>
+      {!user && (
+        <div className="flex gap-4 text-rose-600">
+          <Link to="/login">Login</Link>
+          <Link to="/register">Criar Conta</Link>
+        </div>
+      )}
 
 
-            <span className="font-semibold">
-              Olá, {user.name}
-            </span>
+      {user && (
+        <div className="flex gap-5 items-center text-rose-600">
+          <Link to="/profile">Meu Perfil</Link>
+          <Link to="/my-pets">Meus Pets</Link>
+          <Link to="/add-pet">+ Pet</Link>
 
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 px-3 py-1 rounded"
-            >
-              Logout
-            </button>
-          </>
-        )}
+          <span>Olá, {user.name}</span>
 
-      </div>
+          <button
+            onClick={handleLogout}
+            className="bg-rose-500 text-white px-3 py-1 rounded-full"
+          >
+            Logout
+          </button>
+        </div>
+      )}
     </nav>
+  );
+}
+
+
+
+
+function Layout({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+
+  const hideNavbarOn = ["/"]; 
+
+  const hideNavbar = hideNavbarOn.includes(location.pathname);
+
+  return (
+    <>
+      {!hideNavbar && <Navbar />}
+      {children}
+    </>
   );
 }
 
@@ -72,21 +92,18 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-
-        <Navbar />
-
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/pet/:id" element={<PetDetails />} />
-          <Route path="/add-pet" element={<AddPet />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/my-pets" element={<MyPets />} />
-
-        </Routes>
-
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/pet/:id" element={<PetDetails />} />
+            <Route path="/add-pet" element={<AddPet />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/my-pets" element={<MyPets />} />
+          </Routes>
+        </Layout>
       </BrowserRouter>
     </AuthProvider>
   );

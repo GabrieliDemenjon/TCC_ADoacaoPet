@@ -18,28 +18,44 @@ export default function ForgotPassword() {
   }
 
   return (
-    <main className="p-4 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Recuperar Senha</h1>
+    <div
+      className="
+        min-h-screen flex items-center justify-center
+        bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100
+        px-6
+      "
+    >
+      <main
+        className="
+          w-full max-w-md
+          bg-white/60 backdrop-blur-xl
+          p-8 rounded-3xl
+          shadow-lg border border-rose-200/40
+        "
+      >
+        <h1 className="text-3xl font-semibold text-center text-rose-500 mb-6">
+          Recuperar Senha
+        </h1>
 
-      <form className="space-y-3" onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Seu email"
-          className="p-2 border rounded w-full"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <button className="px-4 py-2 bg-blue-600 text-white rounded w-full">
-          Enviar
-        </button>
-      </form>
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Seu email"
+            className="input-rose"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-      <p className="text-center text-sm mt-4">
-        Lembrou a senha?{" "}
-        <Link to="/login" className="text-blue-600">
-          Entrar
-        </Link>
-      </p>
-    </main>
+          <button className="btn-rose w-full">Enviar</button>
+        </form>
+
+        <p className="text-center text-rose-700 mt-6">
+          Lembrou a senha?{" "}
+          <Link className="text-rose-600 font-semibold" to="/login">
+            Entrar
+          </Link>
+        </p>
+      </main>
+    </div>
   );
 }

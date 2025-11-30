@@ -23,45 +23,86 @@ export default function Login() {
   }
 
   return (
-    <main className="p-4 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Entrar</h1>
-
-      <form className="space-y-3" onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          className="p-2 border rounded w-full"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <input
-          type="password"
-          placeholder="Senha"
-          className="p-2 border rounded w-full"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button className="px-4 py-2 bg-blue-600 text-white rounded w-full">
+    <div
+      className="
+        min-h-screen
+        flex flex-col items-center justify-center
+        bg-gradient-to-br
+        from-rose-50 via-pink-50 to-rose-100
+        px-6
+      "
+    >
+      <main
+        className="
+          w-full max-w-md 
+          bg-white/60 backdrop-blur-xl 
+          p-8 rounded-3xl 
+          shadow-lg border border-rose-200/40
+        "
+      >
+        <h1 className="text-3xl font-semibold text-center text-rose-500 mb-6">
           Entrar
-        </button>
-      </form>
+        </h1>
 
-      <div className="mt-4 text-center">
-        <p className="text-sm text-gray-700">
-          Não tem conta?{" "}
-          <Link to="/register" className="text-blue-600 font-semibold">
-            Criar Conta
-          </Link>
-        </p>
+        <form className="space-y-4" onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            className="
+              w-full px-4 py-3 
+              rounded-xl 
+              border border-rose-200 
+              bg-white/70
+              focus:ring-2 focus:ring-rose-300 focus:outline-none
+            "
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <p className="text-sm text-gray-700 mt-2">
-          <Link to="/forgot-password" className="text-blue-600">
-            Esqueci minha senha
-          </Link>
-        </p>
-      </div>
-    </main>
+          <input
+            type="password"
+            placeholder="Senha"
+            className="
+              w-full px-4 py-3 
+              rounded-xl 
+              border border-rose-200 
+              bg-white/70
+              focus:ring-2 focus:ring-rose-300 focus:outline-none
+            "
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button
+            className="
+              w-full py-3 
+              bg-rose-500 text-white 
+              rounded-full 
+              font-medium 
+              shadow-md 
+              hover:bg-rose-600 
+              transition-all
+            "
+          >
+            Entrar
+          </button>
+        </form>
+
+        <div className="mt-6 text-center text-rose-700">
+          <p className="text-sm">
+            Não tem conta?{" "}
+            <Link to="/register" className="font-semibold text-rose-600">
+              Criar Conta
+            </Link>
+          </p>
+
+          <p className="text-sm mt-2">
+            <Link to="/forgot-password" className="text-rose-500 underline">
+              Esqueci minha senha
+            </Link>
+          </p>
+        </div>
+      </main>
+    </div>
   );
 }

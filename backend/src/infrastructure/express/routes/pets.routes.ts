@@ -13,7 +13,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const router = Router();
 
-// LISTAR TODOS OS PETS
+
 router.get("/", async (req, res, next) => {
   try {
     const pets = await listPetsController();
@@ -23,7 +23,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-// LISTAR APENAS PETS DO USUÁRIO LOGADO
+
 router.get("/my-pets", jwtAuth, async (req: any, res, next) => {
   try {
     const pets = await prisma.pet.findMany({
@@ -37,7 +37,7 @@ router.get("/my-pets", jwtAuth, async (req: any, res, next) => {
   }
 });
 
-// DETALHES DO PET
+
 router.get("/:id", async (req, res, next) => {
   try {
     const id = Number(req.params.id);
@@ -48,10 +48,10 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-// CRIAR PET
+
 router.post("/", jwtAuth, upload.single("image"), createPetController);
 
-// ADOTAR PET
+
 router.patch("/:id/adopt", jwtAuth, adoptPetController);
 
 export default router;
