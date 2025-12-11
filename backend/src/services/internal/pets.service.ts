@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { sanitize } from "../../shared/utils/sanitizer";
 import cloudinary from "../../shared/cloudinary/cloudinary";
 
 const prisma = new PrismaClient();
@@ -13,7 +14,6 @@ export async function listPetsController() {
   });
 }
 
-
 export async function getPetController(id: number) {
   return prisma.pet.findUnique({
     where: { id },
@@ -25,10 +25,13 @@ export async function getPetController(id: number) {
   });
 }
 
-
 export async function createPetController(req: any, res: any, next: any) {
   try {
-    const { name, age, type, description } = req.body;
+
+    const name = sanitize(req.body.name);
+    const age = Number(req.body.age);
+    const type = sanitize(req.body.type);
+    const description = sanitize(req.body.description);
 
     if (!req.userId) {
       return res.status(401).json({ message: "Usuário não autenticado" });
@@ -37,7 +40,8 @@ export async function createPetController(req: any, res: any, next: any) {
     let imageUrl = null;
 
     if (req.file) {
-      imageUrl = req.file.path; 
+
+      imageUrl = req.file.path;
     }
 
     const pet = await prisma.pet.create({
@@ -58,7 +62,6 @@ export async function createPetController(req: any, res: any, next: any) {
   }
 }
 
-
 export async function adoptPetController(req: any, res: any, next: any) {
   try {
     const id = Number(req.params.id);
@@ -67,7 +70,6 @@ export async function adoptPetController(req: any, res: any, next: any) {
       return res.status(401).json({ message: "Usuário não autenticado" });
     }
 
-    
     const pet = await prisma.pet.findUnique({ where: { id } });
 
     if (!pet) {

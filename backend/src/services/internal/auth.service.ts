@@ -1,12 +1,16 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { sanitize } from "../../shared/utils/sanitizer";
 
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || "change_this";
 
 export async function loginController(email: string, password: string) {
-  const user = await prisma.user.findUnique({ where: { email } });
+
+  const safeEmail = sanitize(email);
+
+  const user = await prisma.user.findUnique({ where: { email: safeEmail } });
 
   if (!user) throw new Error("Usuário não encontrado");
 
@@ -19,16 +23,24 @@ export async function loginController(email: string, password: string) {
 }
 
 export async function registerController(data: any) {
-  const hashed = await bcrypt.hash(data.password, 10);
+
+  const name = sanitize(data.name);
+  const email = sanitize(data.email);
+  const password = data.password; 
+  const phone = sanitize(data.phone);
+  const city = sanitize(data.city);
+  const state = sanitize(data.state);
+
+  const hashed = await bcrypt.hash(password, 10);
 
   const newUser = await prisma.user.create({
     data: {
-      name: data.name,
-      email: data.email,
+      name,
+      email,
       password: hashed,
-      phone: data.phone,
-      city: data.city,
-      state: data.state,
+      phone,
+      city,
+      state,
     },
   });
 
@@ -36,10 +48,13 @@ export async function registerController(data: any) {
 }
 
 export async function forgotPasswordController(email: string) {
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) return { status: "ok" }; // segurança
+  const safeEmail = sanitize(email);
+  const user = await prisma.user.findUnique({ where: { email: safeEmail } });
 
-  console.log("Solicitação de redefinição:", email);
+  if (!user) return { status: "ok" };
+
+  console.log("Pedido de redefinição de senha:", safeEmail);
+
   return { status: "ok" };
 }
 
@@ -49,4 +64,26 @@ export async function meController(req: any, res: any) {
   });
 
   return res.json(user);
+}
+
+export async function updateProfileController(userId: number, data: any) {
+
+  const name = sanitize(data.name);
+  const email = sanitize(data.email);
+  const phone = sanitize(data.phone);
+  const city = sanitize(data.city);
+  const state = sanitize(data.state);
+
+  const updated = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      name,
+      email,
+      phone,
+      city,
+      state,
+    },
+  });
+
+  return updated;
 }

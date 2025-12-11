@@ -3,8 +3,10 @@ import {
   loginController, 
   registerController, 
   forgotPasswordController, 
-  meController 
+  meController,
+  updateProfileController
 } from "../../../services/internal/auth.service";
+
 import { jwtAuth } from "../../../shared/middlewares/auth.middleware";
 
 const router = Router();
@@ -38,5 +40,14 @@ router.post("/forgot-password", async (req, res, next) => {
 });
 
 router.get("/me", jwtAuth, meController);
+
+router.patch("/update", jwtAuth, async (req: any, res, next) => {
+  try {
+    const updated = await updateProfileController(req.userId, req.body);
+    return res.json(updated);
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default router;

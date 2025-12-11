@@ -52,7 +52,9 @@ export default function Home() {
             carinho, segurança e a chance de recomeçar. Seja sendo adotado
             ou doado com responsabilidade. 💗🐾
           </p>
+          <p className="text-gray-600 text-lg md:text-x3 mb-6">Faça login ou cadastre-se para ver todos os detalhes e interagir!
 
+          </p>
 
           <div className="flex gap-4 mt-6">
             <a
@@ -72,13 +74,13 @@ export default function Home() {
         </div>
 
 
-        <div className="flex items-start justify-center md:-mt-20 -mt-10">
+        <div className="flex items-center justify-center self-start mt-10 md:mt-16">
           <img
             src={Logo}
             alt="Pet&Eu Logo"
             className="
-              w-72 md:w-[380px] 
-              opacity-95 
+              w-72 md:w-[540px] 
+              opacity-90 
               drop-shadow-[0_0_40px_rgba(255,182,193,0.5)]
             "
           />

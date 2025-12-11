@@ -18,6 +18,7 @@ model pet {
   imageUrl    String?   @db.VarChar(255)
   adoptedBy   Int?
   adoptedAt   DateTime? @db.DateTime(0)
+  adoptable   Boolean   @default(false)
   adopter     user?     @relation("PetAdopter", fields: [adoptedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_pet_adoptedBy")
   user        user      @relation(fields: [userId], references: [id], map: "Pet_userId_fkey")
 

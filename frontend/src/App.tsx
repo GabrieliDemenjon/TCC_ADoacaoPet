@@ -13,8 +13,6 @@ import MyPets from "./pages/MyPets";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Logo from "./assets/logo.png";
 
-
-
 function Navbar() {
   const { user, setUser } = useAuth();
 
@@ -27,14 +25,13 @@ function Navbar() {
   return (
     <nav
       className="
-        w-full px-6 py-3
-        fixed top-0 left-0 z-50 
-        bg-white/40 backdrop-blur-xl 
+        w-full px-6 py-2
+        fixed top-0 left-0 z-50
+        bg-white/40 backdrop-blur-xl
         border-b border-rose-200/40
         flex justify-between items-center
       "
     >
-
       <Link to="/" className="flex items-center gap-2">
         <img src={Logo} alt="Pet&Eu" className="w-12 opacity-150" />
         <span className="text-rose-500 font-semibold text-lg">Home</span>
@@ -46,7 +43,6 @@ function Navbar() {
           <Link to="/register">Criar Conta</Link>
         </div>
       )}
-
 
       {user && (
         <div className="flex gap-5 items-center text-rose-600">
@@ -69,13 +65,10 @@ function Navbar() {
 }
 
 
-
-
 function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
 
-  const hideNavbarOn = ["/"]; 
-
+  const hideNavbarOn = ["/"];
   const hideNavbar = hideNavbarOn.includes(location.pathname);
 
   return (
@@ -85,8 +78,6 @@ function Layout({ children }: { children: React.ReactNode }) {
     </>
   );
 }
-
-
 
 export default function App() {
   return (

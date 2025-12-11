@@ -22,14 +22,10 @@ export default function Register() {
     if (value.length > 11) value = value.slice(0, 11);
 
     if (value.length <= 10) {
-      return value
-        .replace(/^(\d{2})(\d)/, "($1) $2")
-        .replace(/(\d{4})(\d)/, "$1-$2");
+      return value.replace(/^(\d{2})(\d)/, "($1) $2").replace(/(\d{4})(\d)/, "$1-$2");
     }
 
-    return value
-      .replace(/^(\d{2})(\d)/, "($1) $2")
-      .replace(/(\d{5})(\d)/, "$1-$2");
+    return value.replace(/^(\d{2})(\d)/, "($1) $2").replace(/(\d{5})(\d)/, "$1-$2");
   }
 
   function handleChange(e: any) {
@@ -44,31 +40,23 @@ export default function Register() {
   }
 
   function validateFields() {
-    if (!form.email.endsWith("@gmail.com"))
-      return "O email deve terminar com @gmail.com";
+    if (!form.email.endsWith("@gmail.com")) return "O email deve terminar com @gmail.com";
 
     const password = form.password;
 
-    if (password.length < 6)
-      return "A senha precisa ter no mínimo 6 caracteres.";
+    if (password.length < 6) return "A senha precisa ter no mínimo 6 caracteres.";
 
-    if (!/[0-9]/.test(password))
-      return "A senha precisa ter ao menos 1 número.";
+    if (!/[0-9]/.test(password)) return "A senha precisa ter ao menos 1 número.";
 
-    if (!/[a-zA-Z]/.test(password))
-      return "A senha precisa ter ao menos 1 letra.";
+    if (!/[a-zA-Z]/.test(password)) return "A senha precisa ter ao menos 1 letra.";
 
-    if (!/[!@#$%^&*()_+\-=?]/.test(password))
-      return "A senha precisa ter ao menos 1 símbolo (!@#$%).";
+    if (!/[!@#$%^&*()_+\-=?]/.test(password)) return "A senha precisa ter ao menos 1 símbolo (!@#$%).";
 
-    if (form.phone.length < 14)
-      return "Digite um telefone válido no formato (XX) XXXXX-XXXX";
+    if (form.phone.length < 14) return "Digite um telefone válido no formato (XX) XXXXX-XXXX";
 
-    if (form.city.length < 3)
-      return "Digite uma cidade válida.";
+    if (form.city.length < 3) return "Digite uma cidade válida.";
 
-    if (form.state.length !== 2)
-      return "O estado deve ter exatamente 2 letras, ex: SP";
+    if (form.state.length !== 2) return "O estado deve ter exatamente 2 letras, ex: SP";
 
     return null;
   }
@@ -100,24 +88,25 @@ export default function Register() {
   return (
     <div
       className="
-        min-h-screen flex items-center justify-center
+        min-h-screen 
+        flex items-center justify-center
         bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100
-        px-6
+        px-4 
       "
     >
       <main
         className="
-          w-full max-w-md
+          w-full max-w-sm
           bg-white/60 backdrop-blur-xl
-          p-8 rounded-3xl
+          p-6 rounded-2xl
           shadow-lg border border-rose-200/40
         "
       >
-        <h1 className="text-3xl font-semibold text-center text-rose-500 mb-6">
+        <h1 className="text-3xl font-semibold text-center text-rose-500 mb-5">
           Criar Conta
         </h1>
 
-        <form className="space-y-4" onSubmit={handleRegister}>
+        <form className="space-y-3" onSubmit={handleRegister}>
           {error && (
             <p className="text-red-600 font-semibold bg-red-100 p-3 rounded-xl">
               {error}
@@ -144,7 +133,6 @@ export default function Register() {
             required
           />
 
-          {/* SENHA + OLHO */}
           <div className="relative">
             <input
               name="password"
@@ -158,7 +146,7 @@ export default function Register() {
 
             <button
               type="button"
-              className="absolute right-3 top-3 text-gray-600"
+              className="absolute right-3 top-[10px] text-gray-600"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? "🙈" : "👁️"}
@@ -198,7 +186,7 @@ export default function Register() {
           <button className="btn-rose w-full">Criar Conta</button>
         </form>
 
-        <p className="text-center text-rose-700 mt-6">
+        <p className="text-center text-rose-700 mt-4">
           Já tem conta?{" "}
           <Link to="/login" className="text-rose-600 font-semibold">
             Entrar

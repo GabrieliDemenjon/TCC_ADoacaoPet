@@ -26,41 +26,56 @@ export default function MyPets() {
   if (loading) return <p className="p-4">Carregando...</p>;
 
   return (
-    <main className="p-4 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Meus Pets</h1>
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100 px-6 py-24">
+
+      <h1 className="text-4xl font-bold text-rose-500 text-center mb-10">
+        Meus Pets
+      </h1>
 
       {pets.length === 0 && (
-        <p className="text-gray-500">Você ainda não cadastrou nenhum pet.</p>
+        <p className="text-center text-gray-600 text-lg">
+          Você ainda não cadastrou nenhum pet 🐾
+        </p>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
         {pets.map((pet) => (
-          <div key={pet.id} className="border rounded p-4 shadow bg-white">
+          <div
+            key={pet.id}
+            className="
+              bg-white/70 backdrop-blur-xl 
+              rounded-2xl shadow-md border border-rose-200 
+              p-4 hover:shadow-lg hover:scale-[1.02] transition
+            "
+          >
             {pet.imageUrl ? (
               <img
                 src={pet.imageUrl}
                 alt={pet.name}
-                className="w-full h-40 object-cover rounded mb-3"
+                className="w-full h-40 object-cover rounded-xl mb-3"
               />
             ) : (
-              <div className="w-full h-40 bg-gray-300 rounded mb-3 flex items-center justify-center">
+              <div className="w-full h-40 bg-gray-300 rounded-xl mb-3 flex items-center justify-center">
                 Sem foto
               </div>
             )}
 
-            <h2 className="text-lg font-semibold">{pet.name}</h2>
+            <h2 className="text-xl font-semibold text-rose-600">{pet.name}</h2>
             <p>{pet.age} anos</p>
             <p className="mb-3">{pet.type}</p>
 
             <a
               href={`/pet/${pet.id}`}
-              className="block bg-blue-600 text-white text-center py-2 rounded"
+              className="
+                block bg-rose-500 text-white text-center py-2 
+                rounded-full font-medium shadow hover:bg-rose-600 transition
+              "
             >
               Ver detalhes
             </a>
           </div>
         ))}
       </div>
-    </main>
+    </div>
   );
 }

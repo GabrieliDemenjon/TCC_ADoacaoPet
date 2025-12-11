@@ -10,7 +10,6 @@ export function jwtAuth(req: Request, res: Response, next: NextFunction) {
     return res.status(401).json({ message: "Token não fornecido" });
   }
 
-
   const parts = auth.split(" ");
 
   if (parts.length !== 2 || parts[0] !== "Bearer") {
@@ -22,15 +21,13 @@ export function jwtAuth(req: Request, res: Response, next: NextFunction) {
   try {
     const payload = jwt.verify(token, JWT_SECRET) as any;
 
-
-    if (!payload.userId) {
+    if (!payload.id) {
       return res.status(401).json({ message: "Token malformado" });
     }
 
+    (req as any).userId = payload.id;
 
-    (req as any).userId = payload.userId;
-
-    next();
+    return next();
   } catch (err) {
     return res.status(401).json({ message: "Token inválido ou expirado" });
   }
