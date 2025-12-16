@@ -25,7 +25,10 @@ model pet {
   @@index([adoptedBy], map: "FK_pet_adoptedBy")
   @@index([userId], map: "Pet_userId_fkey")
 }
-
+enum Role {
+  ADOTANTE
+  DOADOR
+}
 model user {
   id          Int     @id @default(autoincrement())
   name        String
@@ -36,4 +39,5 @@ model user {
   state       String?
   petsAdopted pet[]   @relation("PetAdopter")
   petsCreated pet[]
+  role        Role  @default(ADOTANTE)
 }

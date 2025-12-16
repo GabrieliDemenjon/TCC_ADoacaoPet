@@ -9,6 +9,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import AddPet from "./pages/AddPet";
 import Profile from "./pages/Profile";
 import MyPets from "./pages/MyPets";
+import AdoptPets from "./pages/AdoptPets";
 
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Logo from "./assets/logo.png";
@@ -93,6 +94,7 @@ export default function App() {
             <Route path="/add-pet" element={<AddPet />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/my-pets" element={<MyPets />} />
+            <Route path="/adopt" element={<AdoptPets />} />
           </Routes>
         </Layout>
       </BrowserRouter>

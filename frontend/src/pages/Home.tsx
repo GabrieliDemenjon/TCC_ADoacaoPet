@@ -14,8 +14,6 @@ export default function Home() {
         relative 
       "
     >
-
-
       <div
         className="
           absolute inset-0 
@@ -26,7 +24,6 @@ export default function Home() {
           pointer-events-none
         "
       ></div>
-
 
       <main
         className="
@@ -39,8 +36,6 @@ export default function Home() {
           pt-10 md:pt-0
         "
       >
-
-
         <div>
           <h1 className="text-4xl md:text-5xl font-bold text-rose-500 leading-tight mb-6">
             Adoção e doação com amor.<br />
@@ -48,31 +43,40 @@ export default function Home() {
           </h1>
 
           <p className="text-gray-600 text-lg md:text-xl mb-6">
-            Na <span className="font-semibold text-rose-400">Pet&Eu</span>, acreditamos que cada animal merece
-            carinho, segurança e a chance de recomeçar. Seja sendo adotado
-            ou doado com responsabilidade. 💗🐾
-          </p>
-          <p className="text-gray-600 text-lg md:text-x3 mb-6">Faça login ou cadastre-se para ver todos os detalhes e interagir!
-
+            Na <span className="font-semibold text-rose-400">Pet&Eu</span>,
+            acreditamos que cada animal merece carinho, segurança e a chance de
+            recomeçar. Seja sendo adotado ou doado com responsabilidade. 💗🐾
           </p>
 
-          <div className="flex gap-4 mt-6">
-            <a
-              href="/login"
-              className="px-6 py-3 bg-rose-500 text-white rounded-full shadow-md hover:bg-rose-600 transition-all"
-            >
-              Login
-            </a>
+          <p className="text-gray-600 text-lg md:text-x3 mb-6">
+            Faça login ou cadastre-se para ver todos os detalhes e interagir!
+          </p>
 
-            <a
-              href="/register"
-              className="px-6 py-3 bg-white text-rose-600 rounded-full shadow-md border border-rose-300 hover:bg-rose-50 transition-all"
-            >
-              Cadastrar-se
-            </a>
+
+          <div className="flex gap-4 mt-6 flex-wrap">
+          <a
+            href="/login"
+            className="px-6 py-3 bg-rose-500 text-white rounded-full shadow-md hover:bg-rose-600 transition-all"
+          >
+          Login
+          </a>
+
+          <a
+            href="/register"
+            className="px-6 py-3 bg-rose-500 text-white rounded-full shadow-md hover:bg-rose-600 transition-all"
+          >
+          Cadastrar-se
+          </a>
+
+          <a
+            href="/adopt"
+            className="px-6 py-3 bg-rose-500 text-white rounded-full shadow-md hover:bg-rose-600 transition-all"
+          >
+          Ver pets disponíveis
+          </a>
+          
           </div>
         </div>
-
 
         <div className="flex items-center justify-center self-start mt-10 md:mt-16">
           <img
@@ -85,7 +89,6 @@ export default function Home() {
             "
           />
         </div>
-
       </main>
     </div>
   );

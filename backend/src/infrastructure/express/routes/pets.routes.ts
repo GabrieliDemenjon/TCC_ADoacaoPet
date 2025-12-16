@@ -13,6 +13,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const router = Router();
 
+
 router.get("/", async (req, res, next) => {
   try {
     const pets = await listPetsController();
@@ -22,11 +23,15 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+
 router.get("/my-pets", jwtAuth, async (req: any, res, next) => {
   try {
     const pets = await prisma.pet.findMany({
       where: { userId: req.userId },
-      include: { user: true },
+      include: {
+        user: true,
+        adopter: true,
+      },
     });
 
     res.json(pets);
@@ -34,6 +39,7 @@ router.get("/my-pets", jwtAuth, async (req: any, res, next) => {
     next(e);
   }
 });
+
 
 router.get("/:id", async (req, res, next) => {
   try {
@@ -45,9 +51,12 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+
 router.post("/", jwtAuth, upload.single("image"), createPetController);
 
+
 router.patch("/:id/adopt", jwtAuth, adoptPetController);
+
 
 router.patch("/:id", jwtAuth, async (req: any, res, next) => {
   try {
@@ -57,6 +66,7 @@ router.patch("/:id", jwtAuth, async (req: any, res, next) => {
     const pet = await prisma.pet.findUnique({ where: { id } });
     if (!pet) return res.status(404).json({ message: "Pet não encontrado" });
 
+   
     if (pet.userId !== req.userId)
       return res.status(403).json({ message: "Não autorizado" });
 
@@ -76,12 +86,14 @@ router.patch("/:id", jwtAuth, async (req: any, res, next) => {
   }
 });
 
+
 router.delete("/:id", jwtAuth, async (req: any, res, next) => {
   try {
     const id = Number(req.params.id);
 
     const pet = await prisma.pet.findUnique({ where: { id } });
     if (!pet) return res.status(404).json({ message: "Pet não encontrado" });
+
 
     if (pet.userId !== req.userId)
       return res.status(403).json({ message: "Não autorizado" });

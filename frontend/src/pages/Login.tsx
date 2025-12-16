@@ -13,7 +13,7 @@ export default function Login() {
   });
 
   const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // 👁️
+  const [showPassword, setShowPassword] = useState(false);
 
   function handleChange(e: any) {
     const { name, value } = e.target;
@@ -25,9 +25,6 @@ export default function Login() {
     const { email, password } = form;
 
     if (!email.trim()) return "O email é obrigatório.";
-
-    if (!email.endsWith("@gmail.com"))
-      return "O email deve terminar com @gmail.com";
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) return "Digite um email válido.";
@@ -68,19 +65,15 @@ export default function Login() {
   }
 
   return (
-    <div
-      className="
-        min-h-screen flex flex-col items-center justify-center
-        bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100
-        px-6
-      "
-    >
-      <main
-        className="
-          w-full max-w-md bg-white/60 backdrop-blur-xl 
-          p-8 rounded-3xl shadow-lg border border-rose-200/40
-        "
-      >
+    <div className="
+      min-h-screen flex flex-col items-center justify-center
+      bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100
+      px-6
+    ">
+      <main className="
+        w-full max-w-md bg-white/60 backdrop-blur-xl 
+        p-8 rounded-3xl shadow-lg border border-rose-200/40
+      ">
         <h1 className="text-3xl font-semibold text-center text-rose-500 mb-6">
           Entrar
         </h1>
@@ -92,7 +85,6 @@ export default function Login() {
             </p>
           )}
 
-          {/* EMAIL */}
           <input
             name="email"
             type="email"
@@ -102,7 +94,6 @@ export default function Login() {
             onChange={handleChange}
           />
 
-          {/* SENHA + OLHO 👁️ */}
           <div className="relative">
             <input
               name="password"

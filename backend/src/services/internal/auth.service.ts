@@ -6,21 +6,33 @@ import { sanitize } from "../../shared/utils/sanitizer";
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || "change_this";
 
+
 export async function loginController(email: string, password: string) {
 
   const safeEmail = sanitize(email);
 
-  const user = await prisma.user.findUnique({ where: { email: safeEmail } });
+  const user = await prisma.user.findUnique({
+    where: { email: safeEmail }
+  });
 
   if (!user) throw new Error("Usuário não encontrado");
 
   const valid = await bcrypt.compare(password, user.password);
   if (!valid) throw new Error("Senha incorreta");
 
-  const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "7d" });
+
+  const token = jwt.sign(
+    {
+      id: user.id,
+      role: user.role || "ADOTANTE",
+    },
+    JWT_SECRET,
+    { expiresIn: "7d" }
+  );
 
   return { token, user };
 }
+
 
 export async function registerController(data: any) {
 
@@ -41,15 +53,20 @@ export async function registerController(data: any) {
       phone,
       city,
       state,
+      role: "ADOTANTE", 
     },
   });
 
   return { id: newUser.id };
 }
 
+
 export async function forgotPasswordController(email: string) {
   const safeEmail = sanitize(email);
-  const user = await prisma.user.findUnique({ where: { email: safeEmail } });
+
+  const user = await prisma.user.findUnique({
+    where: { email: safeEmail }
+  });
 
   if (!user) return { status: "ok" };
 
@@ -57,6 +74,7 @@ export async function forgotPasswordController(email: string) {
 
   return { status: "ok" };
 }
+
 
 export async function meController(req: any, res: any) {
   const user = await prisma.user.findUnique({

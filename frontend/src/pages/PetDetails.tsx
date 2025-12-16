@@ -57,10 +57,12 @@ export default function PetDetails() {
     if (!editForm.age.toString().trim()) newErrors.age = "A idade é obrigatória.";
 
     const ageNum = Number(editForm.age);
-    if (ageNum < 0 || ageNum > 25) newErrors.age = "A idade deve estar entre 0 e 25 anos.";
+    if (ageNum < 0 || ageNum > 25)
+      newErrors.age = "A idade deve estar entre 0 e 25 anos.";
 
     if (!editForm.type.trim()) newErrors.type = "O tipo é obrigatório.";
-    if (!editForm.description.trim()) newErrors.description = "A descrição é obrigatória.";
+    if (!editForm.description.trim())
+      newErrors.description = "A descrição é obrigatória.";
 
     return newErrors;
   }
@@ -111,7 +113,9 @@ export default function PetDetails() {
     }
   }
 
-  const isOwner = user && pet?.userId === user.id;
+  // 🔑 AJUSTE CIRÚRGICO AQUI
+  const isOwner = user?.id === pet?.userId;
+  const canAdopt = user && !isOwner && !pet?.adopted;
 
   if (loading) return <p className="p-4">Carregando...</p>;
   if (!pet) return <p className="p-4">Pet não encontrado.</p>;
@@ -140,7 +144,10 @@ export default function PetDetails() {
           <>
             <p><strong>Tipo:</strong> {pet.type}</p>
             <p><strong>Idade:</strong> {pet.age} anos</p>
-            <p className="mt-2"><strong>Status:</strong> {pet.adopted ? "Adotado ❤️" : "Disponível"}</p>
+            <p className="mt-2">
+              <strong>Status:</strong>{" "}
+              {pet.adopted ? "Adotado ❤️" : "Disponível"}
+            </p>
 
             <h3 className="text-xl mt-6 font-semibold text-rose-600">Tutor</h3>
             <p>{pet.user?.name}</p>
@@ -148,7 +155,9 @@ export default function PetDetails() {
 
             {pet.adopted && pet.adopter && (
               <>
-                <h3 className="text-xl mt-6 font-semibold text-rose-600">Adotado por</h3>
+                <h3 className="text-xl mt-6 font-semibold text-rose-600">
+                  Adotado por
+                </h3>
                 <p>{pet.adopter.name}</p>
                 <p>{pet.adopter.email}</p>
               </>
@@ -172,7 +181,7 @@ export default function PetDetails() {
               </div>
             )}
 
-            {!isOwner && !pet.adopted && (
+            {canAdopt && (
               <button
                 onClick={handleAdopt}
                 className="mt-6 w-full bg-rose-500 text-white p-3 rounded-full font-semibold shadow hover:bg-rose-600 transition"
@@ -193,7 +202,9 @@ export default function PetDetails() {
                 value={editForm.name}
                 onChange={handleEditChange}
               />
-              {errors.name && <p className="text-red-600 text-sm">{errors.name}</p>}
+              {errors.name && (
+                <p className="text-red-600 text-sm">{errors.name}</p>
+              )}
             </div>
 
             <div>
@@ -205,7 +216,9 @@ export default function PetDetails() {
                 value={editForm.age}
                 onChange={handleEditChange}
               />
-              {errors.age && <p className="text-red-600 text-sm">{errors.age}</p>}
+              {errors.age && (
+                <p className="text-red-600 text-sm">{errors.age}</p>
+              )}
             </div>
 
             <div>
@@ -216,7 +229,9 @@ export default function PetDetails() {
                 value={editForm.type}
                 onChange={handleEditChange}
               />
-              {errors.type && <p className="text-red-600 text-sm">{errors.type}</p>}
+              {errors.type && (
+                <p className="text-red-600 text-sm">{errors.type}</p>
+              )}
             </div>
 
             <div>
@@ -227,7 +242,11 @@ export default function PetDetails() {
                 value={editForm.description}
                 onChange={handleEditChange}
               />
-              {errors.description && <p className="text-red-600 text-sm">{errors.description}</p>}
+              {errors.description && (
+                <p className="text-red-600 text-sm">
+                  {errors.description}
+                </p>
+              )}
             </div>
 
             <div className="flex gap-3">

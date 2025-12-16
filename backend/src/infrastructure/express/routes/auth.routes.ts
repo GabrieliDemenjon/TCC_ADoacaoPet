@@ -11,6 +11,7 @@ import { jwtAuth } from "../../../shared/middlewares/auth.middleware";
 
 const router = Router();
 
+
 router.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -21,6 +22,7 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+
 router.post("/register", async (req, res, next) => {
   try {
     const response = await registerController(req.body);
@@ -29,6 +31,7 @@ router.post("/register", async (req, res, next) => {
     next(error);
   }
 });
+
 
 router.post("/forgot-password", async (req, res, next) => {
   try {
@@ -39,7 +42,9 @@ router.post("/forgot-password", async (req, res, next) => {
   }
 });
 
+
 router.get("/me", jwtAuth, meController);
+
 
 router.patch("/update", jwtAuth, async (req: any, res, next) => {
   try {

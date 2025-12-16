@@ -40,23 +40,21 @@ export default function Register() {
   }
 
   function validateFields() {
-    if (!form.email.endsWith("@gmail.com")) return "O email deve terminar com @gmail.com";
+    const { email, password, phone, city, state } = form;
 
-    const password = form.password;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return "Digite um email válido.";
 
     if (password.length < 6) return "A senha precisa ter no mínimo 6 caracteres.";
-
     if (!/[0-9]/.test(password)) return "A senha precisa ter ao menos 1 número.";
-
     if (!/[a-zA-Z]/.test(password)) return "A senha precisa ter ao menos 1 letra.";
-
     if (!/[!@#$%^&*()_+\-=?]/.test(password)) return "A senha precisa ter ao menos 1 símbolo (!@#$%).";
 
-    if (form.phone.length < 14) return "Digite um telefone válido no formato (XX) XXXXX-XXXX";
+    if (phone.length < 14) return "Digite um telefone válido no formato (XX) XXXXX-XXXX";
 
-    if (form.city.length < 3) return "Digite uma cidade válida.";
+    if (city.length < 3) return "Digite uma cidade válida.";
 
-    if (form.state.length !== 2) return "O estado deve ter exatamente 2 letras, ex: SP";
+    if (state.length !== 2) return "O estado deve ter exatamente 2 letras, ex: SP";
 
     return null;
   }
@@ -77,7 +75,7 @@ export default function Register() {
         alert("Conta criada com sucesso!");
         navigate("/login");
       } else {
-        alert("Erro ao criar conta");
+        alert("Erro ao criar conta.");
       }
     } catch (err) {
       console.error(err);
@@ -86,22 +84,18 @@ export default function Register() {
   }
 
   return (
-    <div
-      className="
-        min-h-screen 
-        flex items-center justify-center
-        bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100
-        px-4 
-      "
-    >
-      <main
-        className="
-          w-full max-w-sm
-          bg-white/60 backdrop-blur-xl
-          p-6 rounded-2xl
-          shadow-lg border border-rose-200/40
-        "
-      >
+    <div className="
+      min-h-screen 
+      flex items-center justify-center
+      bg-gradient-to-br from-rose-50 via-pink-50 to-rose-100
+      px-4
+    ">
+      <main className="
+        w-full max-w-sm
+        bg-white/60 backdrop-blur-xl
+        p-6 rounded-2xl
+        shadow-lg border border-rose-200/40
+      ">
         <h1 className="text-3xl font-semibold text-center text-rose-500 mb-5">
           Criar Conta
         </h1>
@@ -126,7 +120,7 @@ export default function Register() {
           <input
             name="email"
             type="email"
-            placeholder="Email (apenas @gmail.com)"
+            placeholder="Email"
             className="input-rose"
             value={form.email}
             onChange={handleChange}

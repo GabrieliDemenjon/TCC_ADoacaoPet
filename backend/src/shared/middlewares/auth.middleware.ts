@@ -26,6 +26,8 @@ export function jwtAuth(req: Request, res: Response, next: NextFunction) {
     }
 
     (req as any).userId = payload.id;
+    (req as any).role = payload.role || "ADOTANTE";
+
 
     return next();
   } catch (err) {
