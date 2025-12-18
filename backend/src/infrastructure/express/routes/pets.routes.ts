@@ -13,7 +13,19 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 const router = Router();
 
+router.get("/adopted", jwtAuth, async (req: any, res, next) => {
+  try {
+    const pets = await prisma.pet.findMany({
+      where: {
+        adoptedBy: req.userId,
+      },
+    });
 
+    res.json(pets);
+  } catch (e) {
+    next(e);
+  }
+});
 router.get("/", async (req, res, next) => {
   try {
     const pets = await listPetsController();
@@ -105,5 +117,8 @@ router.delete("/:id", jwtAuth, async (req: any, res, next) => {
     next(e);
   }
 });
+
+
+
 
 export default router;

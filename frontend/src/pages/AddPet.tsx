@@ -89,7 +89,7 @@ export default function AddPet() {
         mt-10
       ">
         <h1 className="text-3xl font-semibold text-center text-rose-500 mb-6">
-          Adicionar Novo Pet
+          Doar um novo Pet
         </h1>
 
         <form className="space-y-5" onSubmit={handleSubmit}>

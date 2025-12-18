@@ -34,7 +34,7 @@ export default function MyPets() {
 
       {pets.length === 0 && (
         <p className="text-center text-gray-600 text-lg">
-          Você ainda não cadastrou nenhum pet 🐾
+          Você ainda não colocou nenhum pet para doação🐾
         </p>
       )}
 

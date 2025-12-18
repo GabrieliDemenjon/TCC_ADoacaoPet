@@ -4,15 +4,37 @@ import { apiPost } from "../utils/api";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+
+  function validateEmail(value: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(value);
+  }
 
   async function handleSubmit(e: any) {
     e.preventDefault();
+    setError("");
 
-    const res = await apiPost("/auth/forgot-password", { email });
+    if (!email.trim()) {
+      setError("Informe seu email.");
+      return;
+    }
 
-    if (res?.status === "ok") {
-      alert("Se o email existir, enviaremos um link para recuperação.");
-    } else {
+    if (!validateEmail(email)) {
+      setError("Informe um email válido.");
+      return;
+    }
+
+    try {
+      const res = await apiPost("/auth/forgot-password", { email });
+
+      if (res?.status === "ok") {
+        alert("Se o email existir, enviaremos instruções de recuperação.");
+        setEmail("");
+      } else {
+        alert("Erro ao solicitar redefinição de senha.");
+      }
+    } catch (err) {
       alert("Erro ao solicitar redefinição de senha.");
     }
   }
@@ -45,6 +67,10 @@ export default function ForgotPassword() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+
+          {error && (
+            <p className="text-red-600 text-sm text-center">{error}</p>
+          )}
 
           <button className="btn-rose w-full">Enviar</button>
         </form>
